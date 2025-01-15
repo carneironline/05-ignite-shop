@@ -7,6 +7,7 @@ import 'keen-slider/keen-slider.min.css';
 import { GetStaticProps } from 'next';
 import { stripe } from '@/lib/stripe';
 import Stripe from 'stripe';
+import Link from 'next/link';
 
 interface HomeProps {
     products: {
@@ -32,19 +33,21 @@ export default function Home({ products }: HomeProps) {
                 const price = product.price;
 
                 return (
-                    <Product className='keen-slider__slide' key={product.id}>
-                        <Image
-                            src={product.imageUrl}
-                            width={520}
-                            height={520}
-                            alt=''
-                        />
+                    <Link key={product.id} href={`/product/${product.id}`}>
+                        <Product className='keen-slider__slide'>
+                            <Image
+                                src={product.imageUrl}
+                                width={520}
+                                height={520}
+                                alt=''
+                            />
 
-                        <footer>
-                            <strong>{name}</strong>
-                            <span>{price}</span>
-                        </footer>
-                    </Product>
+                            <footer>
+                                <strong>{name}</strong>
+                                <span>{price}</span>
+                            </footer>
+                        </Product>
+                    </Link>
                 );
             })}
         </HomeContainer>
@@ -58,12 +61,16 @@ export const getStaticProps: GetStaticProps = async () => {
 
     const products = response.data.map((product) => {
         const price = product.default_price as Stripe.Price;
+        const formattedPrice = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(price.unit_amount ? price.unit_amount / 100 : 0);
 
         return {
             id: product.id,
             name: product.name,
             imageUrl: product.images[0],
-            price: price.unit_amount ? price.unit_amount / 100 : 0,
+            price: formattedPrice,
         };
     });
 
