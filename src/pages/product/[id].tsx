@@ -6,6 +6,7 @@ import {
 } from '@/styles/pages/product';
 import axios from 'axios';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -46,32 +47,43 @@ export default function Product({ product }: ProductProps) {
     }
 
     return (
-        <ProductContainer>
-            <ImageContainer>
-                <Image src={product.imageUrl} width={520} height={520} alt='' />
-            </ImageContainer>
+        <>
+            <Head>
+                <title>{product.name} | Ignite Shop</title>
+            </Head>
 
-            <ProductDetails>
-                <h1>{product.name}</h1>
+            <ProductContainer>
+                <ImageContainer>
+                    <Image
+                        src={product.imageUrl}
+                        width={520}
+                        height={520}
+                        alt=''
+                    />
+                </ImageContainer>
 
-                <span>{product.price}</span>
+                <ProductDetails>
+                    <h1>{product.name}</h1>
 
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Minima voluptatibus, blanditiis cum perferendis molestiae
-                    iure reiciendis tempora iste eos molestias ad laborum
-                    debitis laudantium nobis cupiditate magni temporibus quia
-                    commodi.
-                </p>
+                    <span>{product.price}</span>
 
-                <button
-                    disabled={isCreatingCheckoutSession}
-                    onClick={handleByProduct}
-                >
-                    Comprar agora
-                </button>
-            </ProductDetails>
-        </ProductContainer>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Minima voluptatibus, blanditiis cum perferendis
+                        molestiae iure reiciendis tempora iste eos molestias ad
+                        laborum debitis laudantium nobis cupiditate magni
+                        temporibus quia commodi.
+                    </p>
+
+                    <button
+                        disabled={isCreatingCheckoutSession}
+                        onClick={handleByProduct}
+                    >
+                        Comprar agora
+                    </button>
+                </ProductDetails>
+            </ProductContainer>
+        </>
     );
 }
 
